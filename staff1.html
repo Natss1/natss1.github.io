@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>หน้าหลัก</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" href="./logo.png">
+  <meta name="theme-color" content="#ff99cc">
+
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: "Prompt", sans-serif; background: #fdfbf4; }
+
+    .header { background: #ff99cc; padding: 10px; display: flex; align-items: center; }
+    .menu-icon { font-size: 24px; cursor: pointer; margin-right: 10px; }
+    .title { font-weight: bold; font-size: 16px; }
+
+    .container { text-align: center; padding: 20px; width: 90%; max-width: 500px; margin: 0 auto; }
+    .btn-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 20px; }
+    .btn { flex: 1 1 140px; min-width: 120px; border: none; padding: 15px 20px; border-radius: 30px; font-size: 16px; font-weight: bold; cursor: pointer; color: #fff; }
+    .blue { background: #6699ff; }
+    .yellow { background: #ffcc33; color: #000; margin-bottom: 20px; }
+
+    .subtitle { font-weight: bold; margin-bottom: 15px; }
+    .list { text-align: left; width: 100%; margin: 0 auto; }
+    .list-item { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.95rem; }
+
+    .footer { background: #ff99cc; padding: 15px; width: 100%; position: fixed; left: 0; bottom: 0; text-align: center; z-index: 100; }
+
+    @media (max-width: 500px) {
+      .btn { font-size: 14px; padding: 12px 15px; }
+      .subtitle { font-size: 14px; }
+      .list-item { font-size: 0.9rem; flex-direction: column; gap: 3px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="menu-icon">☰</div>
+    <div class="title">หน้าหลัก</div>
+  </div>
+
+  <div class="container">
+    <div class="btn-row">
+      <button class="btn blue" onclick="location.href='./โรง1staff.html'">โรงอาหาร1</button>
+      <button class="btn blue" onclick="location.href='./โรง2staff.html'">โรงอาหาร2</button>
+    </div>
+
+    <button class="btn yellow">คณะผู้จัดทำ</button>
+    <div class="subtitle">( มัธยมศึกษาปีที่ 6/5 )</div>
+
+    <div class="list">
+      <div class="list-item"><span>1. นายณภัทร ไกรนรา</span><span>เลขที่ 7</span></div>
+      <div class="list-item"><span>2. นางสาวนัตติยา เชาวน์สุวุม</span><span>เลขที่ 9</span></div>
+      <div class="list-item"><span>3. นางสาวกัญญาพัชร ใยอุ้ย</span><span>เลขที่ 10</span></div>
+      <div class="list-item"><span>4. นางสาวภริญญา ว่องวิจักษ์ฏ์</span><span>เลขที่ 16</span></div>
+    </div>
+  </div>
+
+  <div class="footer"></div>
+
+  <script>
+    // ลงทะเบียน Service Worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js')
+        .then(reg => console.log('Service Worker registered:', reg.scope))
+        .catch(err => console.log('Service Worker failed:', err));
+    }
+  </script>
+</body>
+</html>

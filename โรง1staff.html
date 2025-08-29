@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>กรอกเมนูโรงอาหาร 1</title>
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" href="./logo.png">
+  <meta name="theme-color" content="#ff99cc">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: "Prompt", sans-serif; background: #fdfbf4; }
+
+    .header { background: #ff99cc; padding: 12px; display: flex; align-items: center; justify-content: space-between; }
+    .title { font-weight: bold; font-size: 18px; text-align: center; flex: 1; }
+    .menu-btn { font-size: 24px; cursor: pointer; background: none; border: none; color: #000; }
+
+    .side-menu { position: fixed; top: 0; left: -280px; width: 280px; height: 100%; background: #fff0f5;
+                 box-shadow: 2px 0 5px rgba(0,0,0,0.3); padding: 20px; transition: left 0.3s ease; z-index: 1000; }
+    .side-menu h3 { margin-top: 0; }
+    .side-menu input, .side-menu button { display: block; width: 100%; padding: 12px; margin: 10px 0; border-radius: 12px; font-weight: bold; font-size: 14px; cursor: pointer; }
+    .side-menu input { border: 2px solid #ff6699; }
+    .side-menu button { border: none; background: #ff99cc; color: #fff; }
+    .side-menu button:hover { background: #ff66aa; }
+
+    p { font-size: 28px; font-weight: bold; margin: 20px; text-align: center; }
+
+    .container { max-width: 500px; width: 90%; margin: 20px auto; padding: 20px; }
+    .card { background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.15); border: 2px solid #000; }
+
+    .btn { display: block; width: 100%; margin-bottom: 15px; padding: 14px; border-radius: 30px; font-size: 16px; font-weight: bold; cursor: pointer; background: #fff; color: #000; transition: 0.2s; border: 2px solid #000; }
+    .btn:hover { background: #f2f2f2; border-color: #555; }
+    .btn-pink { border-color: #ff99cc; color: #cc3366; }
+    .btn-pink:hover { background: #ff99cc; color: #fff; }
+
+    .input-box { display: none; margin-bottom: 15px; }
+    .input-box input, .input-box select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; }
+
+    .footer { background: #ff99cc; padding: 15px; width: 100%; position: fixed; left: 0; bottom: 0; text-align: center; z-index: 10; }
+
+    @media (max-width: 500px) {
+      p { font-size: 24px; margin: 15px; }
+      .btn { font-size: 14px; padding: 12px; }
+      .input-box input, .input-box select { font-size: 13px; padding: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="side-menu" id="sideMenu">
+    <h3>เมนู</h3>
+    <label>ลบข้อมูลโดยระบุวัน/เดือน/ปี</label>
+    <input type="date" id="deleteDate">
+    <button onclick="deleteDateData()">ลบข้อมูลวันที่นี้</button>
+    <button onclick="toggleMenu()">ปิดเมนู</button>
+  </div>
+
+  <div class="header">
+    <button class="menu-btn" onclick="toggleMenu()">☰</button>
+    <div class="title">กรอกเมนูโรงอาหาร 1</div>
+  </div>
+
+  <p>โรงอาหาร 1</p>
+
+  <div class="container">
+    <div class="card">
+      <button class="btn" onclick="toggleInput('dateBox')">1. วัน / เดือน / ปี</button>
+      <div class="input-box" id="dateBox">
+        <input type="date" id="dateInput">
+      </div>
+
+      <button class="btn" onclick="toggleInput('menuBox')">2. ใส่เมนู</button>
+      <div class="input-box" id="menuBox">
+        <input type="text" id="menuInput" placeholder="เช่น ข้าวผัดหมู">
+      </div>
+
+      <button class="btn" onclick="toggleInput('mealBox')">3. ใส่เมนู เช้า / กลางวัน</button>
+      <div class="input-box" id="mealBox">
+        <select id="mealInput">
+          <option>เช้า</option>
+          <option>กลางวัน</option>
+        </select>
+      </div>
+
+      <button class="btn btn-pink" onclick="publishData()">เผยแพร่</button>
+    </div>
+  </div>
+
+  <div class="footer"></div>
+
+  <script>
+    function toggleInput(id) {
+      const box = document.getElementById(id);
+      box.style.display = box.style.display === "block" ? "none" : "block";
+    }
+
+    function toggleMenu() {
+      const menu = document.getElementById('sideMenu');
+      menu.style.left = menu.style.left === '0px' ? '-280px' : '0px';
+    }
+
+    function publishData() {
+      const date = document.getElementById('dateInput').value;
+      const menu = document.getElementById('menuInput').value;
+      const meal = document.getElementById('mealInput').value;
+
+      if (!date || !menu) { alert("กรุณากรอกวันที่และเมนู"); return; }
+
+      const month = new Date(date).getMonth() + 1;
+      let data = JSON.parse(localStorage.getItem('canteen1Data')) || {};
+      if (!data[month]) data[month] = [];
+      data[month].push({ date, menu, meal });
+      localStorage.setItem('canteen1Data', JSON.stringify(data));
+
+      alert("เผยแพร่เรียบร้อย!");
+    }
+
+    function deleteDateData() {
+      const dateToDelete = document.getElementById('deleteDate').value;
+      if(!dateToDelete) { alert("กรุณาเลือกวัน/เดือน/ปี"); return; }
+
+      const month = new Date(dateToDelete).getMonth() + 1;
+      let data = JSON.parse(localStorage.getItem('canteen1Data')) || {};
+      if(!data[month] || data[month].length === 0) { alert("เดือนนี้ยังไม่มีข้อมูล"); return; }
+
+      const originalLength = data[month].length;
+      data[month] = data[month].filter(item => item.date !== dateToDelete);
+
+      if(data[month].length === originalLength) { alert("ไม่พบข้อมูลวันที่นี้"); return; }
+
+      localStorage.setItem('canteen1Data', JSON.stringify(data));
+      alert("ลบข้อมูลเรียบร้อย!");
+      toggleMenu();
+    }
+
+    // ลบ Service Worker เก่าที่อาจ cache หน้าเว็บ
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(regs => {
+        for (let reg of regs) { reg.unregister(); }
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ข้อมูลเมนูโรงอาหาร 2</title>
+
+  <!-- PWA -->
+ <link rel="manifest" href="./manifest.json">
+  <link rel="icon" href="./logo.png">
+  <meta name="theme-color" content="#ff99cc">
+
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: "Prompt", sans-serif; background: #fdfbf4; margin: 0; padding: 0; color: #333; }
+
+    header {
+      background: linear-gradient(135deg, #ff99cc, #ff6699);
+      padding: 20px;
+      text-align: center;
+      color: white;
+      border-bottom-left-radius: 20px;
+      border-bottom-right-radius: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    header h2 { margin: 0; font-size: 24px; letter-spacing: 1px; }
+
+    .container { width: 90%; max-width: 500px; margin: 20px auto; padding: 10px; }
+
+    select {
+      width: 100%; padding: 12px; font-size: 16px; border-radius: 12px; border: 2px solid #ff6699;
+      background: white; margin-bottom: 20px; transition: 0.3s;
+    }
+
+    select:focus {
+      outline: none;
+      border-color: #ff3366;
+      box-shadow: 0 0 8px rgba(255, 102, 153, 0.4);
+    }
+
+    .card {
+      background: #fff; padding: 16px; border-radius: 16px; border: 1px solid #eee; margin-bottom: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1); transition: transform 0.2s ease, box-shadow 0.2s ease; width: 100%;
+    }
+
+    .card:hover { transform: translateY(-4px); box-shadow: 0 6px 16px rgba(0,0,0,0.15); }
+
+    .card div { margin-bottom: 6px; font-size: 15px; }
+    .card strong { color: #ff3366; }
+
+    p { text-align: center; font-size: 16px; color: #777; }
+
+    @media (max-width: 500px) {
+      header h2 { font-size: 20px; }
+      select { font-size: 14px; padding: 10px; }
+      .card div { font-size: 14px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h2>🍱 เมนูโรงอาหาร 2</h2>
+  </header>
+
+  <div class="container">
+    <select id="monthSelect" onchange="showMenus()">
+      <option value="">-- เลือกเดือน --</option>
+      <option value="1">มกราคม</option>
+      <option value="2">กุมภาพันธ์</option>
+      <option value="3">มีนาคม</option>
+      <option value="4">เมษายน</option>
+      <option value="5">พฤษภาคม</option>
+      <option value="6">มิถุนายน</option>
+      <option value="7">กรกฎาคม</option>
+      <option value="8">สิงหาคม</option>
+      <option value="9">กันยายน</option>
+      <option value="10">ตุลาคม</option>
+      <option value="11">พฤศจิกายน</option>
+      <option value="12">ธันวาคม</option>
+    </select>
+
+    <div id="menuList"></div>
+  </div>
+
+  <script>
+    // ลงทะเบียน Service Worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js')
+        .then(reg => console.log('Service Worker registered:', reg.scope))
+        .catch(err => console.log('Service Worker failed:', err));
+    }
+
+    function showMenus() {
+      const month = document.getElementById('monthSelect').value;
+      const menuList = document.getElementById('menuList');
+      menuList.innerHTML = '';
+
+      if(!month) return;
+
+      const data = JSON.parse(localStorage.getItem('canteen2Data')) || {};
+      if(!data[month] || data[month].length === 0) {
+        menuList.innerHTML = "<p>ยังไม่มีข้อมูลเดือนนี้</p>";
+        return;
+      }
+
+      data[month].forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <div><strong>📅 วันที่:</strong> ${item.date}</div>
+          <div><strong>🍛 เมนู:</strong> ${item.menu}</div>
+          <div><strong>🍽️ มื้ออาหาร:</strong> ${item.meal}</div>
+        `;
+        menuList.appendChild(card);
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Update Menu โรงอาหาร</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" href="./logo.png">
+  <meta name="theme-color" content="#ff99cc">
+
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Prompt", sans-serif;
+      background: #fdfbf4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 10px;
+    }
+    .container {
+      width: 100%;
+      max-width: 400px;
+      background: #fffaf0;
+      border: 5px solid #000;
+      border-radius: 30px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    h2 { font-size: 1rem; color: #003399; margin-bottom: 20px; line-height: 1.4; }
+    .btn-row { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; margin-bottom: 20px; gap: 10px; }
+    .btn-row span { display: none; }
+    .btn {
+      flex: 1 1 120px;
+      min-width: 120px;
+      border: 2px solid transparent;
+      padding: 10px 0;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: bold;
+      transition: all 0.2s ease;
+    }
+    .btn.active { border: 2px solid #000; }
+    .yellow { background: #ffcc33; color: #000; }
+    .pink { background: #ff99cc; color: #000; }
+    .login-box { background: #ccc; padding: 15px; border-radius: 15px; }
+    .login-box input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      outline: none;
+    }
+    .login-btn {
+      background: #ffcc33;
+      border: none;
+      padding: 10px 25px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+    }
+    @media (min-width: 500px) {
+      h2 { font-size: 1.1rem; }
+      .btn-row span { display: inline; }
+      .btn { font-size: 1rem; }
+      .login-box input, .login-btn { font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>
+      Update Menu โรงอาหาร<br>
+      กลางวันโรงอาหาร 1 และ 2<br>
+      รายวันระดับชั้นมัธยมศึกษาของ<br>
+      โรงเรียนชลประทานวิทยา
+    </h2>
+
+    <div class="btn-row">
+      <button id="staffBtn" class="btn pink" onclick="selectRole('staff')">เจ้าหน้าที่</button>
+      <span>|</span>
+      <button id="studentBtn" class="btn pink" onclick="selectRole('student')">นักเรียน / ครู / ผู้ปกครอง</button>
+    </div>
+
+    <div class="login-box">
+      <input type="text" id="username" placeholder="username">
+      <input type="password" id="password" placeholder="password">
+      <br>
+      <button class="login-btn" onclick="login()">Login</button>
+    </div>
+  </div>
+
+  <script>
+    // Register service worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js')
+        .then(reg => console.log('Service Worker registered:', reg.scope))
+        .catch(err => console.log('Service Worker failed:', err));
+    }
+
+    let role = "";
+
+    function selectRole(selected) {
+      role = selected;
+      document.getElementById("staffBtn").classList.remove("active");
+      document.getElementById("studentBtn").classList.remove("active");
+      if (role === "staff") {
+        document.getElementById("staffBtn").classList.add("active");
+      } else {
+        document.getElementById("studentBtn").classList.add("active");
+      }
+    }
+
+    function login() {
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      if (!role) {
+        alert("กรุณาเลือกเจ้าหน้าที่หรือนักเรียน/ครู/ผู้ปกครอง");
+        return;
+      }
+      if (!username || !password) {
+        alert("กรุณากรอก username และ password");
+        return;
+      }
+
+      // Redirect
+      if (role === "staff") {
+        window.location.href = "./staff1.html";
+      } else {
+        window.location.href = "./user1.html";
+      }
+    }
+  </script>
+</body>
+</html>
