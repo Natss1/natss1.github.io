@@ -6,10 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>หน้าหลัก</title>
 
-  <!-- PWA -->
  <link rel="manifest" href="./manifest.json">
   <link rel="icon" href="./logo.png">
-  <meta name="theme-color" content="#ff99cc">>
+  <meta name="theme-color" content="#ff99cc">
 
   <style>
     * {
@@ -126,7 +125,6 @@
     }
   </style>
 </head>
-
 <body>
   <div class="header">
     <div class="menu-icon">☰</div>
@@ -156,7 +154,7 @@
   <script>
     // ลงทะเบียน Service Worker
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js')
+      navigator.serviceWorker.register('./sw.js')
         .then(reg => console.log('Service Worker registered:', reg.scope))
         .catch(err => console.log('Service Worker failed:', err));
     }
