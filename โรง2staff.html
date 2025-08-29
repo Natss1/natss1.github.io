@@ -11,10 +11,12 @@
     * { box-sizing: border-box; }
     body { margin: 0; font-family: "Prompt", sans-serif; background: #fdfbf4; }
 
+    /* Header */
     .header { background: #ff99cc; padding: 12px; display: flex; align-items: center; justify-content: space-between; }
     .title { font-weight: bold; font-size: 18px; text-align: center; flex: 1; }
     .menu-btn { font-size: 24px; cursor: pointer; background: none; border: none; color: #000; }
 
+    /* Side menu */
     .side-menu { position: fixed; top: 0; left: -280px; width: 280px; height: 100%; background: #fff0f5;
                  box-shadow: 2px 0 5px rgba(0,0,0,0.3); padding: 20px; transition: left 0.3s ease; z-index: 1000; }
     .side-menu h3 { margin-top: 0; }
@@ -25,17 +27,21 @@
 
     p { font-size: 28px; font-weight: bold; margin: 20px; text-align: center; }
 
+    /* Container */
     .container { max-width: 500px; width: 90%; margin: 20px auto; padding: 20px; }
     .card { background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.15); border: 2px solid #000; }
 
+    /* Buttons */
     .btn { display: block; width: 100%; margin-bottom: 15px; padding: 14px; border-radius: 30px; font-size: 16px; font-weight: bold; cursor: pointer; background: #fff; color: #000; transition: 0.2s; border: 2px solid #000; }
     .btn:hover { background: #f2f2f2; border-color: #555; }
     .btn-pink { border-color: #ff99cc; color: #cc3366; }
     .btn-pink:hover { background: #ff99cc; color: #fff; }
 
+    /* Input boxes */
     .input-box { display: none; margin-bottom: 15px; }
     .input-box input, .input-box select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; }
 
+    /* Footer */
     .footer { background: #ff99cc; padding: 15px; width: 100%; position: fixed; left: 0; bottom: 0; text-align: center; z-index: 10; }
 
     @media (max-width: 500px) {
@@ -46,14 +52,18 @@
   </style>
 </head>
 <body>
+  <!-- Side menu -->
   <div class="side-menu" id="sideMenu">
     <h3>เมนู</h3>
     <label>ลบข้อมูลโดยระบุวัน/เดือน/ปี</label>
     <input type="date" id="deleteDate">
     <button onclick="deleteDateData()">ลบข้อมูลวันที่นี้</button>
+    <hr>
+    <button onclick="deleteAllData()">ลบข้อมูลทั้งหมด</button>
     <button onclick="toggleMenu()">ปิดเมนู</button>
   </div>
 
+  <!-- Header -->
   <div class="header">
     <button class="menu-btn" onclick="toggleMenu()">☰</button>
     <div class="title">กรอกเมนูโรงอาหาร 2</div>
@@ -61,6 +71,7 @@
 
   <p>โรงอาหาร 2</p>
 
+  <!-- Content -->
   <div class="container">
     <div class="card">
       <button class="btn" onclick="toggleInput('dateBox')">1. วัน / เดือน / ปี</button>
@@ -130,6 +141,14 @@
       localStorage.setItem('canteen2Data', JSON.stringify(data));
       alert("ลบข้อมูลเรียบร้อย!");
       toggleMenu();
+    }
+
+    function deleteAllData() {
+      if(confirm("คุณแน่ใจหรือไม่ว่าจะลบข้อมูลทั้งหมด?")) {
+        localStorage.removeItem('canteen2Data');
+        alert("ลบข้อมูลทั้งหมดเรียบร้อย!");
+        toggleMenu();
+      }
     }
 
     // ลบ Service Worker เก่าที่อาจ cache หน้าเว็บ
